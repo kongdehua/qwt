@@ -14,8 +14,24 @@
 * QwtSymbol
 * QwtCurveFitter
 * QwtPlotCurve
+	A plot item, that represents a series of points
+
+	A curve is the representation of a series of points in the x-y plane. It supports different display styles, interplation and symbols.
+
+
 * QwtPlotCanvas
-* QwtPlotLayout
+* QwtPlotLayout <--- QwtWidgetOverlay
+	An overlay for a widget
+
+	The main use case of an widget overlay is to avoid heavy repaint operation of the widget below.
+
+	F.e. in combination with the plot canvas an overlay avoid replots as the content of the canvas can be restored from its backing store.
+
+	QwtWidgetOverlay is an abstract base class. Deriving classes are supposed to reimplement the following methods:
+	- drawOverlay()
+	- maskHint()
+
+	Internally, QwtPlotPicker uses overlays for displaying the rubber band and the tracker text.
 
 示例中首先定义了QwtPlot的子类Plot：
 类中首先禁用了所有数轴，设置空白区域
@@ -26,4 +42,10 @@
 更新曲线，所谓更新曲线，实质上就是更新数据。
 
 更新数据：使用updateSamples就可以了。
+
+## 曲线实现方案
+首先定义Curve子类，中间增加一个QTransform，用于移动数据
+
+Curve1子类中，定义QwtSplineCurveFitter曲线过滤器，定义绘制符号，设置Transformation。
+
 
